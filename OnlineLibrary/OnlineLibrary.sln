@@ -3,11 +3,18 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34616.47
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineLibrary.API", "OnlineLibrary.API\OnlineLibrary.API.csproj", "{13607C67-D900-4003-9238-3045D7DE26F5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineLibrary.API", "OnlineLibrary.API\OnlineLibrary.API.csproj", "{13607C67-D900-4003-9238-3045D7DE26F5}"
+	ProjectSection(ProjectDependencies) = postProject
+		{01F60F14-1B97-48EC-85D5-AB5636E818CD} = {01F60F14-1B97-48EC-85D5-AB5636E818CD}
+		{2A413676-8E51-4A8E-B7AA-6FA9FE3C699F} = {2A413676-8E51-4A8E-B7AA-6FA9FE3C699F}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineLibrary.BusinessLogic", "OnlineLibrary.BusinessLogic\OnlineLibrary.BusinessLogic.csproj", "{01F60F14-1B97-48EC-85D5-AB5636E818CD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineLibrary.BusinessLogic", "OnlineLibrary.BusinessLogic\OnlineLibrary.BusinessLogic.csproj", "{01F60F14-1B97-48EC-85D5-AB5636E818CD}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2A413676-8E51-4A8E-B7AA-6FA9FE3C699F} = {2A413676-8E51-4A8E-B7AA-6FA9FE3C699F}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineLibrary.DataAccess", "OnlineLibrary.DataAccess\OnlineLibrary.DataAccess.csproj", "{2A413676-8E51-4A8E-B7AA-6FA9FE3C699F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineLibrary.DataAccess", "OnlineLibrary.DataAccess\OnlineLibrary.DataAccess.csproj", "{2A413676-8E51-4A8E-B7AA-6FA9FE3C699F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
