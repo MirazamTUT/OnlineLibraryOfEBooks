@@ -24,6 +24,12 @@
 	  <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
+
+  <ItemGroup>
+	<ProjectReference Include="..\OnlineLibrary.DataAccess\OnlineLibrary.DataAccess.csproj" />
+	<ProjectReference Include="..\OnlineLibrary.BusinessLogic\OnlineLibrary.BusinessLogic.csproj" />
+  </ItemGroup>
+
   <ItemGroup>
     <Folder Include="Controllers\" />
   </ItemGroup>
