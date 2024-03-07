@@ -2,7 +2,7 @@
 {
     public class UsersLibrary
     {
-        public int UsersLiraryId { get; set; }
+        public int UsersLibraryId { get; set; }
 
         public List<int> EBookId { get; set; }
 
