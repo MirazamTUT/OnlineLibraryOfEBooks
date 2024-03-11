@@ -1,6 +1,6 @@
-﻿namespace OnlineLibrary.DataAccess.Models
+﻿namespace OnlineLibrary.BusinessLogic.DTO.RequestDTOs
 {
-    public class User
+    public class UserRequestDTO
     {
         public int UserId { get; set; }
 
@@ -9,8 +9,5 @@
         public string Password { get; set; }
 
         public string Email { get; set; }
-
-
-        public UsersLibrary UsersLibrary { get; set; }
     }
 }

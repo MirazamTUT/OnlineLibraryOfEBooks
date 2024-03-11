@@ -1,6 +1,6 @@
-﻿namespace OnlineLibrary.DataAccess.Models
+﻿namespace OnlineLibrary.BusinessLogic.DTO.RequestDTOs
 {
-    public class EBook
+    public class EBookRequestDTO
     {
         public int EBookId { get; set; }
 
@@ -17,8 +17,5 @@
         public string ContentType { get; set; }
 
         public int EBookRatingStars { get; set; }
-
-
-        public List<UsersLibrary> UsersLibraries { get; set; }
     }
 }
