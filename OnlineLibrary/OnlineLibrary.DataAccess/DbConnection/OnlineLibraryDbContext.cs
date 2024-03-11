@@ -14,8 +14,6 @@ namespace OnlineLibrary.DataAccess.DbConnection
 
         public DbSet<EBook> EBooks { get; set; }
 
-        public DbSet<MainLibrary> MainLibraries { get; set; }
-
         public DbSet<UsersLibrary> UsersLibraries { get; set; }
     }
 }

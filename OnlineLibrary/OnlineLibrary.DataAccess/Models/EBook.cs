@@ -4,8 +4,6 @@
     {
         public int EBookId { get; set; }
 
-        public int MainLibraryId { get; set; }
-
         public string Title { get; set; }
 
         public string Author { get; set; }
@@ -20,8 +18,6 @@
 
         public int EBookRatingStars { get; set; }
 
-
-        public MainLibrary MainLibrary { get; set; }
 
         public List<UsersLibrary> UsersLibraries { get; set; }
     }
