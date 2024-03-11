@@ -11,9 +11,9 @@ namespace OnlineLibrary.DataAccess.Repository.Repositories
         private readonly OnlineLibraryDbContext _onlineLibraryDbContext;
         private readonly ILogger<EBookRepository> _logger;
 
-        public EBookRepository(OnlineLibraryDbContext onlineLibraryDbContext, ILogger<EBookRepository> logger)
+        public EBookRepository(OnlineLibraryDbContext context, ILogger<EBookRepository> logger)
         {
-            _onlineLibraryDbContext = onlineLibraryDbContext;
+            _onlineLibraryDbContext = context;
             _logger = logger;
         }
 
@@ -23,12 +23,12 @@ namespace OnlineLibrary.DataAccess.Repository.Repositories
             {
                 _onlineLibraryDbContext.EBooks.Add(eBook);
                 await _onlineLibraryDbContext.SaveChangesAsync();
-                _logger.LogInformation("added E-Book to DB");
+                _logger.LogInformation("Added E-Book to DB.");
                 return eBook.EBookId;
             }
             catch (Exception ex)
             {
-                _logger.LogError($"An error occurred while adding the E-Book: {ex.Message}, StackTrace: {ex.StackTrace}");
+                _logger.LogError($"An error occurred while adding the E-Book: {ex.Message}, StackTrace: {ex.StackTrace}.");
                 throw new Exception("Operation was failed when it was adding changes.");
             }
         }
@@ -38,14 +38,14 @@ namespace OnlineLibrary.DataAccess.Repository.Repositories
             try
             {
                 var eBook = await _onlineLibraryDbContext.EBooks
-                    .AsSingleQuery()
+                    .AsSplitQuery()
                     .FirstOrDefaultAsync(x => x.EBookId == id);
                 _logger.LogInformation("E-Book was found.");
                 return eBook;
             }
             catch (Exception ex)
             {
-                _logger.LogError($"There is an error retrieving all E-Books from the database: {ex.Message}, StackTrace: {ex.StackTrace}.");
+                _logger.LogError($"There is an error retrieving E-Book from the database: {ex.Message}, StackTrace: {ex.StackTrace}.");
                 throw new Exception("Operation was failed when it was giving the information.");
             }
         }
@@ -55,7 +55,7 @@ namespace OnlineLibrary.DataAccess.Repository.Repositories
             try
             {
                 var allEBooks = await _onlineLibraryDbContext.EBooks
-                    .AsSingleQuery()
+                    .AsSplitQuery()
                     .ToListAsync();
                 _logger.LogInformation("All E-Books were found.");
                 return allEBooks;
@@ -73,12 +73,12 @@ namespace OnlineLibrary.DataAccess.Repository.Repositories
             {
                 _onlineLibraryDbContext.EBooks.Update(eBook);
                 await _onlineLibraryDbContext.SaveChangesAsync();
-                _logger.LogInformation("updated E-Book from DB");
+                _logger.LogInformation("Updated E-Book from DB.");
                 return eBook.EBookId;
             }
             catch (Exception ex)
             {
-                _logger.LogError($"An error occurred while updating the E-Book: {ex.Message}, StackTrace: {ex.StackTrace}");
+                _logger.LogError($"An error occurred while updating the E-Book: {ex.Message}, StackTrace: {ex.StackTrace}.");
                 throw new Exception("Operation was failed when it was updating changes.");
             }
         }
@@ -89,12 +89,12 @@ namespace OnlineLibrary.DataAccess.Repository.Repositories
             {
                 _onlineLibraryDbContext.EBooks.Remove(eBook);
                 await _onlineLibraryDbContext.SaveChangesAsync();
-                _logger.LogInformation("deleted E-Book from DB");
+                _logger.LogInformation("Deleted E-Book from DB.");
                 return eBook.EBookId;
             }
             catch (Exception ex)
             {
-                _logger.LogError($"An error occurred while deleting the E-Book: {ex.Message}, StackTrace: {ex.StackTrace}");
+                _logger.LogError($"An error occurred while deleting the E-Book: {ex.Message}, StackTrace: {ex.StackTrace}.");
                 throw new Exception("Operation was failed when it was deleting changes.");
             }
         }
