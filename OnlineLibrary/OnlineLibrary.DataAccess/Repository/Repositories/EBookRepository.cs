@@ -67,6 +67,31 @@ namespace OnlineLibrary.DataAccess.Repository.Repositories
             }
         }
 
+        public async Task<List<EBook>> GetAllEBooksWithoutFileAsync()
+        {
+            try
+            {   
+                var allEBooks = await _onlineLibraryDbContext.EBooks
+                    .AsSplitQuery()
+                    .Select(e => new EBook
+                    {
+                        Title = e.Title,
+                        EBookRatingStars = e.EBookRatingStars,
+                        Author = e.Author,
+                        Tags = e.Tags,
+                        Description = e.Description
+                    })
+                    .ToListAsync();
+                _logger.LogInformation("All E-Books were found.");
+                return allEBooks;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"There is an error retrieving all E-Books from the database: {ex.Message}, StackTrace: {ex.StackTrace}.");
+                throw new Exception("Operation was failed when it was giving the information.");
+            }
+        }
+
         public async Task<int> UpdateEBookAsync(EBook eBook)
         {
             try

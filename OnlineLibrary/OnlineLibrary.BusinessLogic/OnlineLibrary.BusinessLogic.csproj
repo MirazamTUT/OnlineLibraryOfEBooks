@@ -30,10 +30,4 @@
 		<ProjectReference Include="..\OnlineLibrary.DataAccess\OnlineLibrary.DataAccess.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="DTO\AutoMapper\" />
-	  <Folder Include="Service\IServices\" />
-	  <Folder Include="Service\Services\" />
-	</ItemGroup>
-
 </Project>

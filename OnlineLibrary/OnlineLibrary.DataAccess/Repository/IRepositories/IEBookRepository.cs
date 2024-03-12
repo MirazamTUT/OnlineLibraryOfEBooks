@@ -10,6 +10,8 @@ namespace OnlineLibrary.DataAccess.Repository.IRepositories
 
         Task<List<EBook>> GetAllEBooksAsync();
 
+        Task<List<EBook>> GetAllEBooksWithoutFileAsync();
+
         Task<int> UpdateEBookAsync(EBook eBook);
 
         Task<int> DeleteEBookAsync(EBook eBook);
