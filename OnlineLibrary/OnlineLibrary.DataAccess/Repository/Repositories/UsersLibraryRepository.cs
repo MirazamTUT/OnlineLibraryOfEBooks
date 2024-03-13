@@ -33,12 +33,20 @@ namespace OnlineLibrary.DataAccess.Repository.Repositories
             }
         }
 
-        public async Task<UsersLibrary> GetUsersLibraryByIdAsync(int id)
+        public async Task<UsersLibrary> GetUsersLibraryByIdWithoutFileAsync(int id)
         {
             try
             {
                 var usersLibrary = await _onlineLibraryDbContext.UsersLibraries
-                    .Include(x => x.EBooks)
+                    .Include(x => x.EBooks
+                        .Select(e => new EBook
+                        {
+                            Title = e.Title,
+                            EBookRatingStars = e.EBookRatingStars,
+                            Author = e.Author,
+                            Tags = e.Tags,
+                            Description = e.Description
+                        }))
                     .AsSplitQuery()
                     .FirstOrDefaultAsync(x => x.UsersLibraryId == id);
                 _logger.LogInformation("User's Library was found.");
@@ -51,12 +59,20 @@ namespace OnlineLibrary.DataAccess.Repository.Repositories
             }
         }
 
-        public async Task<List<UsersLibrary>> GetAllUsersLibrariesAsync()
+        public async Task<List<UsersLibrary>> GetAllUsersLibrariesWithoutFileAsync()
         {
             try
             {
                 var allUsersLibraries = await _onlineLibraryDbContext.UsersLibraries
-                    .Include(x => x.EBooks)
+                    .Include(x => x.EBooks
+                        .Select(e => new EBook
+                        {
+                            Title = e.Title,
+                            EBookRatingStars = e.EBookRatingStars,
+                            Author = e.Author,
+                            Tags = e.Tags,
+                            Description = e.Description
+                        }))
                     .AsSplitQuery()
                     .ToListAsync();
                 _logger.LogInformation("All Users' Libraries were found.");

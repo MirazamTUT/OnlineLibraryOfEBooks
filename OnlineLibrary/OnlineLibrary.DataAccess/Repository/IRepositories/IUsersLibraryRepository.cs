@@ -6,9 +6,9 @@ namespace OnlineLibrary.DataAccess.Repository.IRepositories
     {
         Task<int> AddUsersLibraryAsync(UsersLibrary usersLibrary);
 
-        Task<UsersLibrary> GetUsersLibraryByIdAsync(int id);
+        Task<UsersLibrary> GetUsersLibraryByIdWithoutFileAsync(int id);
 
-        Task<List<UsersLibrary>> GetAllUsersLibrariesAsync();
+        Task<List<UsersLibrary>> GetAllUsersLibrariesWithoutFileAsync();
 
         Task<int> UpdateUsersLibraryAsync(UsersLibrary usersLibrary);
 
