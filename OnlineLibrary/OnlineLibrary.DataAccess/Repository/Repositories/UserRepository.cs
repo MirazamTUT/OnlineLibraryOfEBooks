@@ -71,7 +71,7 @@ namespace OnlineLibrary.DataAccess.Repository.Repositories
         {
             try
             {
-                _onlineLibraryDbContext.Users.Update(user);
+                _onlineLibraryDbContext.Users.Attach(user);
                 await _onlineLibraryDbContext.SaveChangesAsync();
                 _logger.LogInformation("Updated User from DB.");
                 return user.UserId;

@@ -50,6 +50,23 @@ namespace OnlineLibrary.DataAccess.Repository.Repositories
             }
         }
 
+        public async Task<EBook> GetEBookByTitleAndAuthorAsync(string title, string author)
+        {
+            try
+            {
+                var eBook = await _onlineLibraryDbContext.EBooks
+                    .AsSplitQuery()
+                    .FirstOrDefaultAsync(x => x.Title.Equals(title) && x.Author.Equals(author));
+                _logger.LogInformation("E-Book was found.");
+                return eBook;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"There is an error retrieving E-Book from the database: {ex.Message}, StackTrace: {ex.StackTrace}.");
+                throw new Exception("Operation was failed when it was giving the information.");
+            }
+        }
+
         public async Task<List<EBook>> GetAllEBooksAsync()
         {
             try
@@ -96,7 +113,7 @@ namespace OnlineLibrary.DataAccess.Repository.Repositories
         {
             try
             {
-                _onlineLibraryDbContext.EBooks.Update(eBook);
+                _onlineLibraryDbContext.EBooks.Attach(eBook);
                 await _onlineLibraryDbContext.SaveChangesAsync();
                 _logger.LogInformation("Updated E-Book from DB.");
                 return eBook.EBookId;

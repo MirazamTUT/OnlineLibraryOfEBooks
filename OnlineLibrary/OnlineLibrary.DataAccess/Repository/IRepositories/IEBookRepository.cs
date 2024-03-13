@@ -8,6 +8,8 @@ namespace OnlineLibrary.DataAccess.Repository.IRepositories
 
         Task<EBook> GetEBookByIdAsync(int id);
 
+        Task<EBook> GetEBookByTitleAndAuthorAsync(string title, string author);
+
         Task<List<EBook>> GetAllEBooksAsync();
 
         Task<List<EBook>> GetAllEBooksWithoutFileAsync();

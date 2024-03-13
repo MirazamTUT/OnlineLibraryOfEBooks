@@ -73,7 +73,7 @@ namespace OnlineLibrary.DataAccess.Repository.Repositories
         {
             try
             {
-                _onlineLibraryDbContext.UsersLibraries.Update(usersLibrary);
+                _onlineLibraryDbContext.UsersLibraries.Attach(usersLibrary);
                 await _onlineLibraryDbContext.SaveChangesAsync();
                 _logger.LogInformation("Updated User's Library from DB.");
                 return usersLibrary.UsersLibraryId;

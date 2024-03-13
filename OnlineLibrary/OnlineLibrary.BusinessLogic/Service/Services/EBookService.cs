@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using OnlineLibrary.BusinessLogic.DTO.RequestDTOs;
@@ -6,6 +7,7 @@ using OnlineLibrary.BusinessLogic.DTO.ResponseDTOs;
 using OnlineLibrary.BusinessLogic.Service.IServices;
 using OnlineLibrary.DataAccess.Models;
 using OnlineLibrary.DataAccess.Repository.IRepositories;
+using System.Reflection.Metadata.Ecma335;
 
 namespace OnlineLibrary.BusinessLogic.Service.Services
 {
@@ -13,11 +15,13 @@ namespace OnlineLibrary.BusinessLogic.Service.Services
     {
         private readonly IEBookRepository _eBookRepository;
         private readonly ILogger<EBookService> _logger;
+        private readonly IMapper _mapper;
 
-        public EBookService(IEBookRepository eBookRepository, ILogger<EBookService> logger)
+        public EBookService(IEBookRepository eBookRepository, ILogger<EBookService> logger, IMapper mapper)
         {
             _eBookRepository = eBookRepository;
             _logger = logger;
+            _mapper = mapper;
         }
 
         public async Task<int> UploadEBookAsync(EBookRequestDTO requestDTO, IFormFile formFile)
@@ -28,16 +32,9 @@ namespace OnlineLibrary.BusinessLogic.Service.Services
                 await formFile.CopyToAsync(memoryStream);
                 var fileContent = memoryStream.ToArray();
 
-                var eBook = new EBook()
-                {
-                    Title = requestDTO.Title,
-                    Author = requestDTO.Author,
-                    Description = requestDTO.Description,
-                    Tags = requestDTO.Tags,
-                    ContentType = formFile.ContentType,
-                    Content = fileContent,
-                    EBookRatingStars = requestDTO.EBookRatingStars
-                };
+                var eBook = _mapper.Map<EBook>(requestDTO);
+                eBook.ContentType = formFile.ContentType;
+                eBook.Content = fileContent;
 
                 int eBookId = await _eBookRepository.AddEBookAsync(eBook);
                 _logger.LogInformation("Finished uploading E-Book to db.");
@@ -54,9 +51,8 @@ namespace OnlineLibrary.BusinessLogic.Service.Services
         {
             try
             {
-                var fileEntity = await _eBookRepository.GetEBookByIdAsync(id);
-                if (fileEntity == null)
-                    return null;
+                var fileEntity = await _eBookRepository
+                    .GetEBookByIdAsync(id) ?? throw new Exception("E-Book was not found.");
 
                 var fileStream = new MemoryStream(fileEntity.Content);
                 _logger.LogInformation("Founded E-Book.");
@@ -69,19 +65,83 @@ namespace OnlineLibrary.BusinessLogic.Service.Services
             }
         }
 
-        public Task<List<EBookResponseDTO>> GetAllEBooksAsync()
+        public async Task<List<EBookResponseDTO>> GetAllEBooksAsync()
         {
-            throw new NotImplementedException();
+            try
+            {
+                var allEBooks = _mapper.Map<List<EBookResponseDTO>>(await _eBookRepository.GetAllEBooksAsync());
+                _logger.LogInformation("All E-Books were found.");
+                return allEBooks;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error retrieving files: {ex.Message} , StackTrace: {ex.StackTrace}");
+                throw new Exception("Error retrieving files.");
+            }
         }
 
-        public Task<int> UpdateEBookAsync(EBookRequestDTO requestDTO, IFormFile? formFile, int? id)
+        public async Task<List<EBookWithoutFileResponseDTO>> GetAllEBooksWithoutFileAsync()
         {
-            throw new NotImplementedException();
+            try
+            {
+                var allEBooksWithoutFile = _mapper.Map<List<EBookWithoutFileResponseDTO>>
+                    (await _eBookRepository.GetAllEBooksWithoutFileAsync());
+                _logger.LogInformation("All E-Books were found and returned without files.");
+                return allEBooksWithoutFile;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error retrieving files: {ex.Message} , StackTrace: {ex.StackTrace}");
+                throw new Exception("Error retrieving files.");
+            }
         }
 
-        public Task<int> DeleteEBookAsync(int id)
+        public async Task<int> UpdateEBookAsync(EBookRequestDTO requestDTO, IFormFile? formFile)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var eBookForUpdate = await _eBookRepository.GetEBookByTitleAndAuthorAsync(requestDTO.Title, requestDTO.Author);
+                eBookForUpdate.Title = requestDTO.Title;
+                eBookForUpdate.Author = requestDTO.Author;
+                eBookForUpdate.Description = requestDTO.Description;
+                eBookForUpdate.Tags = requestDTO.Tags;
+                eBookForUpdate.EBookRatingStars = requestDTO.EBookRatingStars;
+
+                if (formFile is not null)
+                {
+                    using var memoryStream = new MemoryStream();
+                    await formFile.CopyToAsync(memoryStream);
+                    var fileContent = memoryStream.ToArray();
+
+                    eBookForUpdate.ContentType = formFile.ContentType;
+                    eBookForUpdate.Content = fileContent;
+                }
+
+                var resultId = await _eBookRepository.UpdateEBookAsync(eBookForUpdate);
+                _logger.LogInformation("E-Book was updated.");
+                return resultId;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"An error occurred while updating the E-Book: {ex.Message}, StackTrace: {ex.StackTrace}.");
+                throw new Exception("Operation was failed when it was updating changes.");
+            }
+        }
+
+        public async Task<int> DeleteEBookByIdAsync(int id)
+        {
+            try
+            {
+                var eBookForDelete = await _eBookRepository.GetEBookByIdAsync(id);
+                var resultId = await _eBookRepository.DeleteEBookAsync(eBookForDelete);
+                _logger.LogInformation("Deleted E-Book from DB.");
+                return resultId;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"An error occurred while deleting the E-Book: {ex.Message}, StackTrace: {ex.StackTrace}.");
+                throw new Exception("Operation was failed when it was deleting changes.");
+            }
         }
     }
 }

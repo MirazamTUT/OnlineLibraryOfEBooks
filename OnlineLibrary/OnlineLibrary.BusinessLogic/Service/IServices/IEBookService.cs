@@ -12,8 +12,10 @@ namespace OnlineLibrary.BusinessLogic.Service.IServices
 
         public Task<List<EBookResponseDTO>> GetAllEBooksAsync();
 
-        public Task<int> UpdateEBookAsync(EBookRequestDTO requestDTO, IFormFile? formFile, int? id);
+        public Task<List<EBookWithoutFileResponseDTO>> GetAllEBooksWithoutFileAsync();
 
-        public Task<int> DeleteEBookAsync(int id);
+        public Task<int> UpdateEBookAsync(EBookRequestDTO requestDTO, IFormFile? formFile);
+
+        public Task<int> DeleteEBookByIdAsync(int id);
     }
 }

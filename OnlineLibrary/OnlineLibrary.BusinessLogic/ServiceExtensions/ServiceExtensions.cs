@@ -16,6 +16,8 @@ namespace OnlineLibrary.BusinessLogic.ServiceExtensions
 
             services.AddScoped<OnlineLibraryDbContext>();
 
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
             services.AddScoped<IEBookRepository, EBookRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUsersLibraryRepository, UsersLibraryRepository>();
