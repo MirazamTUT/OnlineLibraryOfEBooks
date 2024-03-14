@@ -4,6 +4,8 @@
     {
         public int UsersLibraryId { get; set; }
 
+        public int UserId { get; set; }
+
         public List<int> EBookId { get; set; }
 
 

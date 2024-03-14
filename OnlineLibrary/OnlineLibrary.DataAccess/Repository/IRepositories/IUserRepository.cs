@@ -8,9 +8,9 @@ namespace OnlineLibrary.DataAccess.Repository.IRepositories
 
         Task<User> GetUserByIdAsync(int id);
 
-        Task<List<User>> GetAllUsersAsync();
+        public Task<User> GetUserByUserNameAsync(string userName);
 
-        Task<int> UpdateUserAsync(User user);
+        Task<List<User>> GetAllUsersAsync();
 
         Task<int> DeleteUserAsync(User user);
     }

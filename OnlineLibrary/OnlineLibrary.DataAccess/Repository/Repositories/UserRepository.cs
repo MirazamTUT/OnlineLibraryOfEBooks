@@ -39,7 +39,25 @@ namespace OnlineLibrary.DataAccess.Repository.Repositories
             {
                 var user = await _onlineLibraryDbContext.Users
                     .AsSplitQuery()
-                    .FirstOrDefaultAsync();
+                    .FirstOrDefaultAsync(x => x.UserId == id);
+                _logger.LogInformation("User was found.");
+                return user;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"There is an error retrieving User from the database: {ex.Message}, StackTrace: {ex.StackTrace}.");
+                throw new Exception("Operation was failed when it was giving the information.");
+            }
+        }
+
+        public async Task<User> GetUserByUserNameAsync(string userName)
+        {
+            try
+            {
+                var user = await _onlineLibraryDbContext.Users
+                    .Include(x => x.UserLibrary.UsersLibraryId)
+                    .AsSplitQuery()
+                    .FirstOrDefaultAsync(x => x.UserName == userName);
                 _logger.LogInformation("User was found.");
                 return user;
             }
@@ -64,22 +82,6 @@ namespace OnlineLibrary.DataAccess.Repository.Repositories
             {
                 _logger.LogError($"There is an error retrieving all Users from the database: {ex.Message}, StackTrace: {ex.StackTrace}.");
                 throw new Exception("Operation was failed when it was giving the information.");
-            }
-        }
-
-        public async Task<int> UpdateUserAsync(User user)
-        {
-            try
-            {
-                _onlineLibraryDbContext.Users.Update(user);
-                await _onlineLibraryDbContext.SaveChangesAsync();
-                _logger.LogInformation("Updated User from DB.");
-                return user.UserId;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"An error occurred while updating the User: {ex.Message}, StackTrace: {ex.StackTrace}.");
-                throw new Exception("Operation was failed when it was updating changes.");
             }
         }
 

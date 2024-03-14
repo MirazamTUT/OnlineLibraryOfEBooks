@@ -4,14 +4,16 @@ namespace OnlineLibrary.DataAccess.Repository.IRepositories
 {
     public interface IUsersLibraryRepository
     {
-        Task<int> AddUsersLibraryAsync(UsersLibrary usersLibrary);
+        Task AddUsersLibraryAsync(UsersLibrary usersLibrary);
 
-        Task<UsersLibrary> GetUsersLibraryByIdAsync(int id);
+        Task<UsersLibrary> GetUsersLibraryByIdWithFileAsync(int id);
 
-        Task<List<UsersLibrary>> GetAllUsersLibrariesAsync();
+        Task<UsersLibrary> GetUsersLibraryByIdWithoutFileAsync(int id);
+
+        Task<List<UsersLibrary>> GetAllUsersLibrariesWithoutFileAsync();
 
         Task<int> UpdateUsersLibraryAsync(UsersLibrary usersLibrary);
 
-        Task<int> DeleteUsersLibraryAsync(UsersLibrary usersLibrary);
+        Task DeleteUsersLibraryAsync(UsersLibrary usersLibrary);
     }
 }
