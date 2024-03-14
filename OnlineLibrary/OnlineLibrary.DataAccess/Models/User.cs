@@ -11,6 +11,6 @@
         public string Email { get; set; }
 
 
-        public UsersLibrary UsersLibrary { get; set; }
+        public UsersLibrary UserLibrary { get; set; }
     }
 }

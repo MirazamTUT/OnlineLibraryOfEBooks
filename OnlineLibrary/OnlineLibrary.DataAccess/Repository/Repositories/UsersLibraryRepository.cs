@@ -17,19 +17,36 @@ namespace OnlineLibrary.DataAccess.Repository.Repositories
             _logger = logger;
         }
 
-        public async Task<int> AddUsersLibraryAsync(UsersLibrary usersLibrary)
+        public async Task AddUsersLibraryAsync(UsersLibrary usersLibrary)
         {
             try
             {
                 _onlineLibraryDbContext.UsersLibraries.Add(usersLibrary);
                 await _onlineLibraryDbContext.SaveChangesAsync();
                 _logger.LogInformation("Added User's Library to DB.");
-                return usersLibrary.UsersLibraryId;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"An error occurred while adding the User's Library: {ex.Message}, StackTrace: {ex.StackTrace}.");
                 throw new Exception("Operation was failed when it was adding changes.");
+            }
+        }
+
+        public async Task<UsersLibrary> GetUsersLibraryByIdWithFileAsync(int id)
+        {
+            try
+            {
+                var usersLibrary = await _onlineLibraryDbContext.UsersLibraries
+                    .Include(x => x.EBooks)
+                    .AsSplitQuery()
+                    .FirstOrDefaultAsync(x => x.UsersLibraryId == id);
+                _logger.LogInformation("User's Library was found.");
+                return usersLibrary;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"There is an error retrieving User's Library from the database: {ex.Message}, StackTrace: {ex.StackTrace}.");
+                throw new Exception("Operation was failed when it was giving the information.");
             }
         }
 
@@ -101,14 +118,13 @@ namespace OnlineLibrary.DataAccess.Repository.Repositories
             }
         }
 
-        public async Task<int> DeleteUsersLibraryAsync(UsersLibrary usersLibrary)
+        public async Task DeleteUsersLibraryAsync(UsersLibrary usersLibrary)
         {
             try
             {
                 _onlineLibraryDbContext.UsersLibraries.Remove(usersLibrary);
                 await _onlineLibraryDbContext.SaveChangesAsync();
                 _logger.LogInformation("Deleted User's Library from DB.");
-                return usersLibrary.UsersLibraryId;
             }
             catch (Exception ex)
             {

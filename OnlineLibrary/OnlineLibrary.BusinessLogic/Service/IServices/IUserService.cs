@@ -11,8 +11,6 @@ namespace OnlineLibrary.BusinessLogic.Service.IServices
 
         public Task<List<UserResponseDTO>> GetAllUsersAsync();
 
-        public Task<int> UpdateUserAsync(UserRequestDTO userRequestDTO, int? id);
-
-        public Task<int> UpdateUserAsync(int id);
+        public Task<int> DeleteUserAsync(UserRequestDTO userRequestDTO);
     }
 }
