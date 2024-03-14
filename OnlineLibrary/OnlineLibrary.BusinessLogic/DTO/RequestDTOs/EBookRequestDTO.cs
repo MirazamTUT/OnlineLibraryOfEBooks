@@ -1,4 +1,6 @@
-﻿namespace OnlineLibrary.BusinessLogic.DTO.RequestDTOs
+﻿using Microsoft.AspNetCore.Http;
+
+namespace OnlineLibrary.BusinessLogic.DTO.RequestDTOs
 {
     public class EBookRequestDTO
     {
@@ -9,6 +11,8 @@
         public string Description { get; set; }
 
         public List<string> Tags { get; set; }
+
+        public IFormFile formFile { get; set; }
 
         public int EBookRatingStars { get; set; }
     }

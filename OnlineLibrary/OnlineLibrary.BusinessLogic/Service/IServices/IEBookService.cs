@@ -6,7 +6,7 @@ namespace OnlineLibrary.BusinessLogic.Service.IServices
 {
     public interface IEBookService
     {
-        public Task<int> UploadEBookAsync(EBookRequestDTO requestDTO, IFormFile formFile);
+        public Task<int> UploadEBookAsync(EBookRequestDTO requestDTO);
 
         public Task<Stream> GetEBookFileByIdAsync(int id);
 
@@ -14,7 +14,7 @@ namespace OnlineLibrary.BusinessLogic.Service.IServices
 
         public Task<List<EBookWithoutFileResponseDTO>> GetAllEBooksWithoutFileAsync();
 
-        public Task<int> UpdateEBookAsync(EBookRequestDTO requestDTO, IFormFile? formFile);
+        public Task<int> UpdateEBookAsync(EBookRequestDTO requestDTO);
 
         public Task<int> DeleteEBookByIdAsync(int id);
     }

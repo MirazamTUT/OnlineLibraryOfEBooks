@@ -1,13 +1,10 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using OnlineLibrary.BusinessLogic.DTO.RequestDTOs;
 using OnlineLibrary.BusinessLogic.DTO.ResponseDTOs;
 using OnlineLibrary.BusinessLogic.Service.IServices;
 using OnlineLibrary.DataAccess.Models;
 using OnlineLibrary.DataAccess.Repository.IRepositories;
-using System.Reflection.Metadata.Ecma335;
 
 namespace OnlineLibrary.BusinessLogic.Service.Services
 {
@@ -24,16 +21,16 @@ namespace OnlineLibrary.BusinessLogic.Service.Services
             _mapper = mapper;
         }
 
-        public async Task<int> UploadEBookAsync(EBookRequestDTO requestDTO, IFormFile formFile)
+        public async Task<int> UploadEBookAsync(EBookRequestDTO requestDTO)
         {
             try
             {
                 using var memoryStream = new MemoryStream();
-                await formFile.CopyToAsync(memoryStream);
+                await requestDTO.formFile.CopyToAsync(memoryStream);
                 var fileContent = memoryStream.ToArray();
 
                 var eBook = _mapper.Map<EBook>(requestDTO);
-                eBook.ContentType = formFile.ContentType;
+                eBook.ContentType = requestDTO.formFile.ContentType;
                 eBook.Content = fileContent;
 
                 int eBookId = await _eBookRepository.AddEBookAsync(eBook);
@@ -96,7 +93,7 @@ namespace OnlineLibrary.BusinessLogic.Service.Services
             }
         }
 
-        public async Task<int> UpdateEBookAsync(EBookRequestDTO requestDTO, IFormFile? formFile)
+        public async Task<int> UpdateEBookAsync(EBookRequestDTO requestDTO)
         {
             try
             {
@@ -107,13 +104,13 @@ namespace OnlineLibrary.BusinessLogic.Service.Services
                 eBookForUpdate.Tags = requestDTO.Tags;
                 eBookForUpdate.EBookRatingStars = requestDTO.EBookRatingStars;
 
-                if (formFile is not null)
+                if (requestDTO.formFile is not null)
                 {
                     using var memoryStream = new MemoryStream();
-                    await formFile.CopyToAsync(memoryStream);
+                    await requestDTO.formFile.CopyToAsync(memoryStream);
                     var fileContent = memoryStream.ToArray();
 
-                    eBookForUpdate.ContentType = formFile.ContentType;
+                    eBookForUpdate.ContentType = requestDTO.formFile.ContentType;
                     eBookForUpdate.Content = fileContent;
                 }
 
