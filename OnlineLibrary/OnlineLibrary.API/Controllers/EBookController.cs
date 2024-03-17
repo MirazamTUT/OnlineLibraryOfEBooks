@@ -42,7 +42,7 @@ namespace OnlineLibrary.API.Controllers
         }
 
         [HttpGet("Download E-Book by id")]
-        public async Task<ActionResult<int>> DownloadEBookByIdAsync(int id)
+        public async Task<ActionResult<File>> DownloadEBookByIdAsync(int id)
         {
             try
             {
@@ -50,11 +50,11 @@ namespace OnlineLibrary.API.Controllers
                 if (fileStream == null)
                     return NotFound();
 
-                Response.Headers.Add("Content-Disposition", $"attachment; filename=filename.ext");
-                Response.ContentType = "application/octet-stream";
+                // Set response headers for file download
+                var fileName = "filename.ext"; // Replace with the actual file name
+                var contentType = "application/octet-stream"; // Set the appropriate content type
 
-                await fileStream.CopyToAsync(Response.Body);
-                return Ok(id);
+                return File(fileStream, contentType, fileName);
             }
             catch (Exception ex)
             {

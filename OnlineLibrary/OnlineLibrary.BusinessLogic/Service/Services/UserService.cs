@@ -29,8 +29,7 @@ namespace OnlineLibrary.BusinessLogic.Service.Services
             {
                 if (await _userRepository.GetUserByUserNameAsync(userRequestDTO.UserName) is not null)
                 {
-                    var userId = await _userRepository.AddUserAsync
-                    (_mapper.Map<User>(userRequestDTO));
+                    var userId = await _userRepository.AddUserAsync(_mapper.Map<User>(userRequestDTO));
                     await _usersLibraryRepository.AddUsersLibraryAsync(new UsersLibrary() { UserId = userId });
                     return userId;
                 }
@@ -40,21 +39,6 @@ namespace OnlineLibrary.BusinessLogic.Service.Services
             {
                 _logger.LogError($"An error occurred while adding the User: {ex.Message}, StackTrace: {ex.StackTrace}.");
                 throw new Exception("Operation was failed when it was adding changes.");
-            }
-        }
-
-        public async Task<List<UserResponseDTO>> GetAllUsersAsync()
-        {
-            try
-            {
-                var allUsers = _mapper.Map<List<UserResponseDTO>>(await _userRepository.GetAllUsersAsync());
-                _logger.LogInformation("All Users were found.");
-                return allUsers;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"There is an error retrieving all Users from the database: {ex.Message}, StackTrace: {ex.StackTrace}.");
-                throw new Exception("Operation was failed when it was giving the information.");
             }
         }
 
@@ -69,6 +53,21 @@ namespace OnlineLibrary.BusinessLogic.Service.Services
             catch (Exception ex)
             {
                 _logger.LogError($"There is an error retrieving User from the database: {ex.Message}, StackTrace: {ex.StackTrace}.");
+                throw new Exception("Operation was failed when it was giving the information.");
+            }
+        }
+
+        public async Task<List<UserResponseDTO>> GetAllUsersAsync()
+        {
+            try
+            {
+                var allUsers = _mapper.Map<List<UserResponseDTO>>(await _userRepository.GetAllUsersAsync());
+                _logger.LogInformation("All Users were found.");
+                return allUsers;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"There is an error retrieving all Users from the database: {ex.Message}, StackTrace: {ex.StackTrace}.");
                 throw new Exception("Operation was failed when it was giving the information.");
             }
         }
