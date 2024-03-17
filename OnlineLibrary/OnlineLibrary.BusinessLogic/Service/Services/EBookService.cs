@@ -62,6 +62,21 @@ namespace OnlineLibrary.BusinessLogic.Service.Services
             }
         }
 
+        public async Task<EBookResponseDTO> GetEBookByIdAsync(int id)
+        {
+            try
+            {
+                var eBookResponseDTO = _mapper.Map<EBookResponseDTO>(await _eBookRepository.GetEBookByIdAsync(id));
+                _logger.LogInformation("Founded E-Book.");
+                return eBookResponseDTO;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error retrieving file: {ex.Message} , StackTrace: {ex.StackTrace}");
+                throw new Exception("Error retrieving file.");
+            }
+        }
+
         public async Task<List<EBookResponseDTO>> GetAllEBooksAsync()
         {
             try

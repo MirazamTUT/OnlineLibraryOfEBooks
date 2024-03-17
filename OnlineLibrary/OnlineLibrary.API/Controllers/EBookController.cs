@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OnlineLibrary.BusinessLogic.DTO.RequestDTOs;
+using OnlineLibrary.BusinessLogic.DTO.ResponseDTOs;
 using OnlineLibrary.BusinessLogic.Service.IServices;
 
 namespace OnlineLibrary.API.Controllers
@@ -18,7 +19,7 @@ namespace OnlineLibrary.API.Controllers
             _logger = logger;
         }
 
-        [HttpPost("UploadEBook"), DisableRequestSizeLimit]
+        [HttpPost("uploadEBook"), DisableRequestSizeLimit]
         public async Task<ActionResult<int>> UploadEBookAsync([FromForm] EBookRequestDTO eBookRequestDTO)
         {
             try
@@ -41,20 +42,20 @@ namespace OnlineLibrary.API.Controllers
             }
         }
 
-        [HttpGet("Download E-Book by id")]
-        public async Task<ActionResult<File>> DownloadEBookByIdAsync(int id)
+        [HttpGet("download")]
+        public async Task<IActionResult> DownloadEBookByIdAsync(int id)
         {
             try
             {
                 var fileStream = await _eBookService.GetEBookFileByIdAsync(id);
                 if (fileStream == null)
+                {
                     return NotFound();
+                }
 
-                // Set response headers for file download
-                var fileName = "filename.ext"; // Replace with the actual file name
-                var contentType = "application/octet-stream"; // Set the appropriate content type
+                var eBookResponseDTO = await _eBookService.GetEBookByIdAsync(id);
 
-                return File(fileStream, contentType, fileName);
+                return File(fileStream, eBookResponseDTO.ContentType, eBookResponseDTO.Title);
             }
             catch (Exception ex)
             {
